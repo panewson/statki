@@ -1,0 +1,68 @@
+1 Rozbudowa MainWindow.xaml
+
+W aktualnej wersji dodano kompletny interfejs użytkownika:
+
+* dynamiczne generowanie dwóch plansz przy użyciu `ItemsControl` i `UniformGrid`,
+* powiązanie komórek z obiektami `Cell` poprzez mechanizm data binding,
+* obsługę kliknięć komórek za pomocą komend (`CellClickedCommand`),
+* panel informacyjny wyświetlający status gry oraz informację o turze,
+* przycisk „Nowa gra”, aktywowany po zakończeniu rozgrywki,
+* stylowanie planszy przeciwnika z podświetleniem możliwego celu ataku.
+
+Widok jest w pełni zintegrowany z ViewModelami i reaguje dynamicznie na zmiany stanu danych.
+
+2 Rozszerzenie Modelu
+
+Wprowadzono istotne zmiany w warstwie logiki:
+
+* Klasa `Cell` została rozszerzona o implementację `INotifyPropertyChanged`, co umożliwia automatyczne odświeżanie interfejsu po zmianie stanu komórki.
+* W klasie `Ship` zmodyfikowano konstruktor tak, aby tablica `Cells` była tworzona zgodnie z długością statku.
+* Rozszerzono właściwość `IsSunk`, aby poprawnie rozpoznawała zatopienie statku.
+* W klasie `Board` dodano metodę `AllShipsSunk()`, która umożliwia sprawdzenie warunku zakończenia gry.
+
+3 Rozszerzenie ViewModel
+
+Największe zmiany wprowadzono w warstwie ViewModel:
+
+* Dodano mechanizm ręcznego rozmieszczania statków gracza w określonej kolejności.
+* Zaimplementowano obsługę strzałów w planszę przeciwnika.
+* Wprowadzono logikę tury przeciwnika z losowym wyborem dostępnego pola.
+* Dodano sprawdzanie warunków zwycięstwa i porażki.
+* Zaimplementowano właściwość `GameOver`, blokującą dalszą interakcję po zakończeniu gry.
+* Dodano komendę `NewGame`, resetującą pełny stan aplikacji.
+* Wprowadzono asynchroniczne opóźnienie między turą gracza i przeciwnika.
+
+Podział prac pomiędzy członków zespołu
+
+ Kuba Dziadynak – Model i logika planszy
+
+wykonał:
+* implementację klas `Board`, `Ship`, `Cell`,
+* definicję enumów `CellState`, `ShipType`, `Direction`,
+* algorytm rozmieszczania statków,
+* mechanizm oddawania strzałów,
+* implementację metody `AllShipsSunk()`,
+* rozszerzenie `Cell` o mechanizm powiadamiania o zmianach.
+
+Filip Wołczyński– BoardViewModel i logika pojedynczej planszy
+
+wykonał:
+
+* implementację `BoardViewModel`,
+* konwersję struktury `Board` do `ObservableCollection<Cell>`,
+* metodę `PlaceRandomShips(bool revealShips)` umożliwiającą ukrywanie statków przeciwnika,
+* metodę `PlaceShip()` wykorzystywaną do ręcznego rozmieszczania statków,
+* metodę `Shoot()` integrującą Model z interfejsem.
+
+Piotr Stępień – MainViewModel oraz interfejs
+
+wykonał:
+* implementację `MainViewModel`,
+* logikę rozmieszczania statków gracza,
+* obsługę kliknięć komórek,
+* implementację mechaniki tur,
+* logikę przeciwnika,
+* obsługę warunków zakończenia gry,
+* implementację komendy `NewGame`,
+* stworzenie kompletnego interfejsu w `MainWindow.xaml`,
+* integrację konwertera `CellToBrushConverter`.
